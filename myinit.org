@@ -289,6 +289,6 @@
   : t
 * Backup-directry
 #+BEGIN_SRC emacs-lisp
-
+  ( setq make-backup-files nil)
 #+END_SRC
-sjdfsjjsdk
+
