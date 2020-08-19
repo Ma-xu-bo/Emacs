@@ -1,0 +1,294 @@
+#+STARTIP: overview
+* interface tweaks
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t)
+(tool-bar-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-set-key (kbd "<f5>") 'revert-buffer)
+#+END_SRC 
+* try
+#+BEGIN_SRC emacs-lisp
+  (use-package try
+    :ensure t)
+#+END_SRC
+* which-key
+  Brings up some help
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :ensure t
+  :config (which-key-mode))
+#+END_SRC
+* Org mode
+#+BEGIN_SRC emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+  (setq indo-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c c") 'org-capture)
+
+  (org-indent-mode)
+#+END_SRC
+* Ibuffer
+#+BEGIN_SRC emacs-lisp
+(defalias 'list-buffers 'ibuffer)
+;;(defalias 'list-buffers 'ibuffer-other-window)
+#+END_SRC
+* tabbar
+#+BEGIN_SRC emacs-lisp
+
+(use-package tabbar
+  :ensure t
+  :config
+  (tabbar-mode 1))
+#+END_SRC
+* Swiper / Ivy / Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :bind
+    ("M-y" . counsel-yank-pop))
+;     :map ivy-minibuffer-map)
+
+  (use-package ivy
+    :ensure t
+    :diminish (ivy-mode)
+    :bind (("C-x b" . ivy-switch-buffer))
+    :config
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy))
+
+  (use-package swiper
+    :ensure try
+    :bind (("C-s" . swiper)
+           ("C-r" . swiper)
+	   ("C-c C-f" . counsel-M-x)
+	   ("M-x" . counsel-M-x)
+	   ("C-x C-f" . counsel-find-file))
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq enable-recursive-minibuffers t)
+      ;; enable this if you want `swiper' to use it
+      ;; (setq search-default-mode #'char-fold-to-regexp)
+      (global-set-key "\C-s" 'swiper)
+      (global-set-key (kbd "C-c C-r") 'ivy-resume)
+      (global-set-key (kbd "<f6>") 'ivy-resume)
+      (global-set-key (kbd "M-x") 'counsel-M-x)
+      (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+      (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+      (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+      (global-set-key (kbd "<f1> o") 'counsel-describe-symbol)
+      (global-set-key (kbd "<f1> l") 'counsel-find-library)
+      (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+      (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+      (global-set-key (kbd "C-c g") 'counsel-git)
+      (global-set-key (kbd "C-c j") 'counsel-git-grep)
+      (global-set-key (kbd "C-c k") 'counsel-ag)
+      (global-set-key (kbd "C-x l") 'counsel-locate)
+      (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+      (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)))
+ #+END_SRC
+
+ #+RESULTS:
+ : counsel-find-file
+
+* Avy - navigate by searching for a letter on the screen and jumping to it
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :ensure t
+  :bind ("M-s" . avy-goto-char))
+#+END_SRC
+* Autocomplete
+#+BEGIN_SRC emacs-lisp
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)))
+#+END_SRC
+* Theme
+#+BEGIN_SRC emacs-lisp
+(load-theme 'leuven t)
+
+(use-package zenburn-theme
+  :ensure t
+)
+#+END_SRC
+* Reveal.js
+  #+BEGIN_SRC emacs-lisp
+  (use-package ox-reveal
+  :ensure ox-reveal)
+
+  (setq org-reveal-root "http://cdn.jsdeliver.net/reveal.js/3.0.0/" )
+  (setq org-reveal-mathjax t)
+  (use-package htmlize
+  :ensure t)
+  (load-theme 'leuven t)
+  #+END_SRC
+
+  #+RESULTS:
+  : t
+* Flycheck
+  #+BEGIN_SRC emacs-lisp
+    (use-package flycheck
+      :ensure t
+      :init
+      (global-flycheck-mode t))
+  #+END_SRC
+* Python
+  #+BEGIN_SRC emacs-lisp
+    (use-package jedi
+      :ensure t
+      :init
+      (add-hook 'python-mode-hook 'jedi:setup)
+      (add-hook 'python-mode-hook 'jedi:ac-setup))
+      
+      (use-package elpy
+      :ensure t
+      :init
+      (elpy-enable))
+
+* Yasnippet
+  #+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+  :ensure t
+  :init
+  (progn
+  (yas-global-mode t)))
+  
+  #+END_SRC
+* Undo Tree
+  #+BEGIN_SRC emacs-lisp
+    (use-package undo-tree
+      :ensure t
+      :init
+      (global-undo-tree-mode))
+  #+END_SRC
+* Misc packages
+  #+BEGIN_SRC emacs-lisp
+    (global-hl-line-mode t)
+
+    (use-package beacon
+      :ensure t
+      :config
+      (beacon-mode 1))
+      ; (setq beacon-color "#666600"))
+    (use-package hungry-delete
+      :ensure t
+      :config
+      (global-hungry-delete-mode))
+    (use-package expand-region
+      :ensure t
+      :config
+      (global-set-key (kbd "C-=") 'er/expand-region))
+      
+(setq save-interprogram-paste-before-kill t)
+
+(global-auto-revert-mode 1)
+(setq suto-revert-verbose nil)
+(global-set-key (kbd "<f5>") 'revert-buffer)
+    (use-package iedit
+      :ensure t)
+
+  #+END_SRC
+* Load other files
+  #+BEGIN_SRC emacs-lisp
+    (defun load-if-exists (f)
+      " "
+      (if (file-readable-p f)
+	  (load-file f)))
+    (load-if-exists "~/Dropbox/shared/mu4econfig.el")
+    (load-if-exists "~/Dropbox/shared/tempstuff.el")
+    (load-if-exists "~/Dropbox/shared/not-for-github.el")
+  #+END_SRC
+
+  #+RESULTS:
+* Web mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package web-mode
+      :ensure t
+      :config
+      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+      (setq web-mode-engines-alist
+	    '(("django" . "\\.html\\'")))
+      (setq web-mode-ac-sources-alist
+	    '(("css" . (ac-source-css-property))
+	      ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+      (setq web-mode-enable-auto-closing t))
+  #+END_SRC
+
+  #+RESULTS:
+  : t
+* Backup-directry
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+#+END_SRC
+
+* Misc packages
+  #+BEGIN_SRC emacs-lisp
+    (global-hl-line-mode t)
+
+    (use-package beacon
+      :ensure t
+      :config
+      (beacon-mode 1))
+      ; (setq beacon-color "#666600"))
+    (use-package hungry-delete
+      :ensure t
+      :config
+      (global-hungry-delete-mode))
+    (use-package expand-region
+      :ensure t
+      :config
+      (global-set-key (kbd "C-=") 'er/expand-region))
+      
+(setq save-interprogram-paste-before-kill t)
+
+(global-auto-revert-mode 1)
+(setq suto-revert-verbose nil)
+(global-set-key (kbd "<f5>") 'revert-buffer)
+    (use-package iedit
+      :ensure t)
+
+  #+END_SRC
+* Load other files
+  #+BEGIN_SRC emacs-lisp
+    (defun load-if-exists (f)
+      " "
+      (if (file-readable-p f)
+	  (load-file f)))
+    (load-if-exists "~/Dropbox/shared/mu4econfig.el")
+    (load-if-exists "~/Dropbox/shared/tempstuff.el")
+    (load-if-exists "~/Dropbox/shared/not-for-github.el")
+  #+END_SRC
+
+  #+RESULTS:
+* Web mode
+  #+BEGIN_SRC emacs-lisp
+    (use-package web-mode
+      :ensure t
+      :config
+      (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+      (setq web-mode-engines-alist
+	    '(("django" . "\\.html\\'")))
+      (setq web-mode-ac-sources-alist
+	    '(("css" . (ac-source-css-property))
+	      ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+      (setq web-mode-enable-auto-closing t))
+  #+END_SRC
+
+  #+RESULTS:
+  : t
+* Backup-directry
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+sjdfsjjsdk
